@@ -10,7 +10,7 @@
                             <h5 class="card-title fw-semibold text-white">Detail Question</h5>
                         </div>
                         <div class="col-6 text-end">
-                            <a href="/admin/your-question" type="button" class="btn btn-warning">Back</a>
+                            <a href="/admin/your-questions" type="button" class="btn btn-warning">Back</a>
                         </div>
                     </div>
                 </div>
@@ -22,6 +22,27 @@
                                 <td><strong>Title</strong></td>
                                 <td>:</td>
                                 <td>{{ $question->title }}</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Topic</strong></td>
+                                <td>:</td>
+                                <td>{{ $question->topic->topic }}</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Status</strong></td>
+                                <td>:</td>
+                                <td>
+                                    @if ($question->status == 'revision')
+                                        <span class="badge text-bg-warning p-2">{{ $question->status }}</span>
+                                    @else
+                                        <span class="badge text-bg-success p-2">{{ $question->status }}</span>
+                                    @endif
+                                </td>
+                            </tr>
+                            <tr>
+                                <td><strong>Teacher / Mentor</strong></td>
+                                <td>:</td>
+                                <td>{{ $question->teacher->name }}</td>
                             </tr>
                             <tr>
                                 <td><strong>Description</strong></td>

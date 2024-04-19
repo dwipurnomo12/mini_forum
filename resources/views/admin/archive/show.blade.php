@@ -10,7 +10,7 @@
                             <h5 class="card-title fw-semibold text-white">Detail Question</h5>
                         </div>
                         <div class="col-6 text-end">
-                            <a href="/admin/questions-to-answer" type="button" class="btn btn-warning">Back</a>
+                            <a href="/admin/archive" type="button" class="btn btn-warning">Back</a>
                         </div>
                     </div>
                 </div>
@@ -32,9 +32,11 @@
                                 <td><strong>Status</strong></td>
                                 <td>:</td>
                                 <td>
-                                    <span class="badge text-bg-warning p-2">{{ $question->status }}</span>
-                                    <button class="btn btn-success btn-sm" onclick="confirmApprove({{ $question->id }})"><i
-                                            class="ti ti-checks"></i> Approve</button>
+                                    @if ($question->status == 'revision')
+                                        <span class="badge text-bg-warning p-2">{{ $question->status }}</span>
+                                    @else
+                                        <span class="badge text-bg-success p-2">{{ $question->status }}</span>
+                                    @endif
                                 </td>
                             </tr>
                             <tr>
@@ -75,9 +77,6 @@
                     <div class="row align-items-center">
                         <div class="col-6">
                             <h5 class="card-title fw-semibold text-white">Answer</h5>
-                        </div>
-                        <div class="col-6 text-end">
-                            <a href="/admin/questions-to-answer" type="button" class="btn btn-warning">Back</a>
                         </div>
                     </div>
                 </div>
@@ -167,67 +166,10 @@
                         </div>
                     @endif
                 </div>
-
-
-                <div class="card">
-                    <div class="card-body">
-                        <form action="/admin/questions-to-answer/{{ $question->id }}" method="post"
-                            enctype="multipart/form-data">
-                            @csrf
-                            <input type="hidden" value="{{ $question->id }}" name="question_id">
-                            <div class="mb-3">
-                                <label for="body" class="form-label">Your Answer : <span
-                                        style="color: red">*</span></label>
-                                <textarea class="form-control" id="body" name="body" rows="3" required></textarea>
-                                @error('body')
-                                    <div class="text-danger">{{ $message }}</div>
-                                @enderror
-                            </div>
-                            <div class="mb-3">
-                                <label for="file" class="form-label">Upload Your File : <span
-                                        style="color: red"><i>Optional</i></span></label>
-                                <input type="file" class="form-control" name="file" id="file"
-                                    value="{{ old('file') }}">
-                                @error('file')
-                                    <div class="text-danger">{{ $message }}</div>
-                                @enderror
-                            </div>
-                            <button type="submit" class="btn btn-primary float-end">Send Answer</button>
-                        </form>
-                    </div>
-                </div>
             </div>
         </div>
     </div>
 
-    <script>
-        function confirmApprove(questionId) {
-            Swal.fire({
-                title: "Agree with this thesis?",
-                text: "The report will be saved in the archive!",
-                icon: "warning",
-                showCancelButton: true,
-                confirmButtonText: "Yes",
-                cancelButtonText: "No",
-            }).then((willSelect) => {
-                if (willSelect.isConfirmed) {
-                    // Ubah metode menjadi POST
-                    var form = document.createElement("form");
-                    form.setAttribute("method", "POST");
-                    form.setAttribute("action", "/questions/" + questionId + "/approve");
 
-                    var csrfToken = document.createElement("input");
-                    csrfToken.setAttribute("type", "hidden");
-                    csrfToken.setAttribute("name", "_token");
-                    csrfToken.setAttribute("value", "{{ csrf_token() }}");
-
-                    form.appendChild(csrfToken);
-
-                    document.body.appendChild(form);
-                    form.submit();
-                }
-            });
-        }
-    </script>
 
 @endsection

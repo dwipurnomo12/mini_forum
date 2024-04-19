@@ -15,6 +15,7 @@ class QuestionsToAnswer extends Controller
         return view('admin.questions-to-answer.index', [
             'questions' => Question::with('user')
                 ->where('teacher_id', auth()->user()->id)
+                ->where('status', 'revision')
                 ->orderBy('updated_at', 'DESC')
                 ->get()
         ]);
@@ -55,5 +56,14 @@ class QuestionsToAnswer extends Controller
         ]);
 
         return redirect()->back()->with('success', 'Successfully send your answer !');
+    }
+
+    public function approve(Request $request, $questionId)
+    {
+        $question = Question::findOrFail($questionId);
+        $question->status = 'accepted';
+        $question->save();
+
+        return redirect('/admin/questions-to-answer')->with('success', 'The report has been successfully approved! And stored in the archives!');
     }
 }

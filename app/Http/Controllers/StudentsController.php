@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\User;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use App\Models\ClassRoom;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
 
@@ -16,7 +17,7 @@ class StudentsController extends Controller
     public function index()
     {
         return view('admin.students.index', [
-            'students'  => User::where('role_id', '3')->latest()->get()
+            'students'  => User::with('class')->where('role_id', '3')->latest()->get()
         ]);
     }
 
@@ -39,7 +40,8 @@ class StudentsController extends Controller
             'password'  => 'required|min:8',
             'role_id'   => 'required',
             'id_number' => 'required|numeric',
-            'major'     => 'required'
+            'major'     => 'required',
+            'class_id'  => 'required'
         ]);
 
         if ($validator->fails()) {
@@ -52,7 +54,8 @@ class StudentsController extends Controller
             'password'  => Hash::make($request->password),
             'role_id'   => $request->role_id,
             'id_number' => $request->id_number,
-            'major'     => $request->major
+            'major'     => $request->major,
+            'class_id'  => $request->class_id
         ]);
 
         return redirect('/admin/students')->with('success', 'Successfully added new data');
@@ -63,9 +66,10 @@ class StudentsController extends Controller
      */
     public function show(string $id)
     {
-        $student = User::where('role_id', '3')->find($id);
+        $student = User::with('class')->where('role_id', '3')->find($id);
         return view('admin.students.show', [
-            'student'   => $student
+            'student'   => $student,
+            'classes'   => ClassRoom::all()
         ]);
     }
 
@@ -74,9 +78,10 @@ class StudentsController extends Controller
      */
     public function edit(string $id)
     {
-        $student = User::where('role_id', '3')->find($id);
+        $student = User::with('class')->where('role_id', '3')->findOrFail($id);
         return view('admin.students.edit', [
-            'student'   => $student
+            'student'   => $student,
+            'classes'   => ClassRoom::all()
         ]);
     }
 
@@ -90,7 +95,8 @@ class StudentsController extends Controller
             'name'      => 'required',
             'email'     => 'required',
             'id_number' => 'required|numeric',
-            'major'     => 'required'
+            'major'     => 'required',
+            'class_id'  => 'required'
         ]);
 
         if ($validator->fails()) {
@@ -112,14 +118,16 @@ class StudentsController extends Controller
                 'email'     => $request->email,
                 'password'  => Hash::make($request->password),
                 'id_number' => $request->id_number,
-                'major'     => $request->major
+                'major'     => $request->major,
+                'class_id'  => $request->class_id
             ]);
         } else {
             $student->update([
                 'name'      => $request->name,
                 'email'     => $request->email,
                 'id_number' => $request->id_number,
-                'major'     => $request->major
+                'major'     => $request->major,
+                'class_id'  => $request->class_id
             ]);
         }
 

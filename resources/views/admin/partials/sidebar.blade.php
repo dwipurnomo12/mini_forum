@@ -47,6 +47,22 @@
                             <span class="hide-menu">Teachers</span>
                         </a>
                     </li>
+                    <li class="sidebar-item">
+                        <a class="sidebar-link" href="/admin/class " aria-expanded="false">
+                            <span>
+                                <i class="ti ti-building"></i>
+                            </span>
+                            <span class="hide-menu">Class</span>
+                        </a>
+                    </li>
+                    <li class="sidebar-item">
+                        <a class="sidebar-link" href="/admin/archive " aria-expanded="false">
+                            <span>
+                                <i class="ti ti-archive"></i>
+                            </span>
+                            <span class="hide-menu">Archive</span>
+                        </a>
+                    </li>
                     <li class="nav-small-cap">
                         <i class="ti ti-dots nav-small-cap-icon fs-4"></i>
                         <span class="hide-menu">Questions </span>
@@ -72,6 +88,26 @@
                         </a>
                     </li>
                 @elseif (auth()->user()->role->role == 'teacher')
+                    <li class="nav-small-cap">
+                        <i class="ti ti-dots nav-small-cap-icon fs-4"></i>
+                        <span class="hide-menu">Master Data</span>
+                    </li>
+                    <li class="sidebar-item">
+                        <a class="sidebar-link" href="/admin/topics " aria-expanded="false">
+                            <span>
+                                <i class="ti ti-category"></i>
+                            </span>
+                            <span class="hide-menu">Topics</span>
+                        </a>
+                    </li>
+                    <li class="sidebar-item">
+                        <a class="sidebar-link" href="/admin/archive " aria-expanded="false">
+                            <span>
+                                <i class="ti ti-archive"></i>
+                            </span>
+                            <span class="hide-menu">Archive</span>
+                        </a>
+                    </li>
                     <li class="nav-small-cap">
                         <i class="ti ti-dots nav-small-cap-icon fs-4"></i>
                         <span class="hide-menu">Questions </span>
@@ -117,38 +153,61 @@
                         </a>
                     </li>
                 @elseif (auth()->user()->role->role == 'student')
-                    <li class="nav-small-cap">
-                        <i class="ti ti-dots nav-small-cap-icon fs-4"></i>
-                        <span class="hide-menu">Questions</span>
-                    </li>
-                    <li class="sidebar-item">
-                        <a class="sidebar-link" href="/admin/your-questions" aria-expanded="false">
-                            <span>
-                                <i class="ti ti-messages"></i>
-                            </span>
-                            <span class="hide-menu">Your Question</span>
-                        </a>
-                    </li>
-
                     @php
-                        $messageUnread = \App\Models\Message::where('student_id', auth()->user()->id)
-                            ->where('is_read', false)
-                            ->count();
+                        $studentId = auth()->user()->id;
+                        $registrationCount = \App\Models\Registration::where('student_id', $studentId)->count();
                     @endphp
 
+                    <!-- Jika mahasiswa sudah mendaftar topik -->
+                    @if ($registrationCount > 0)
+                        <li class="nav-small-cap">
+                            <i class="ti ti-dots nav-small-cap-icon fs-4"></i>
+                            <span class="hide-menu">Question</span>
+                        </li>
+                        <li class="sidebar-item">
+                            <a class="sidebar-link" href="/admin/your-questions" aria-expanded="false">
+                                <span>
+                                    <i class="ti ti-messages"></i>
+                                </span>
+                                <span class="hide-menu">Your Questions</span>
+                            </a>
+                        </li>
+                        <!-- Jika mahasiswa belum mendaftar topik -->
+                    @else
+                        <li class="nav-small-cap">
+                            <i class="ti ti-dots nav-small-cap-icon fs-4"></i>
+                            <span class="hide-menu">Registration</span>
+                        </li>
+                        <li class="sidebar-item">
+                            <a class="sidebar-link" href="/admin/registration" aria-expanded="false">
+                                <span>
+                                    <i class="ti ti-select"></i>
+                                </span>
+                                <span class="hide-menu">Select Topics</span>
+                            </a>
+                        </li>
+                    @endif
+
+                    <!-- Bagian sidebar untuk pesan -->
                     <li class="sidebar-item">
                         <a class="sidebar-link" href="/admin/message" aria-expanded="false">
                             <span>
                                 <i class="ti ti-message-share"></i>
                             </span>
                             <span class="hide-menu">Message</span>
-                            @if (\App\Models\Message::where('student_id', auth()->user()->id)->where('is_read', false)->count() > 0)
+                            @php
+                                $messageUnread = \App\Models\Message::where('student_id', auth()->user()->id)
+                                    ->where('is_read', false)
+                                    ->count();
+                            @endphp
+                            @if ($messageUnread > 0)
                                 <span id="notification-badge"
                                     class="badge text-bg-warning">{{ $messageUnread }}</span>
                             @endif
                         </a>
                     </li>
 
+                    <!-- Bagian sidebar untuk pengaturan -->
                     <li class="nav-small-cap">
                         <i class="ti ti-dots nav-small-cap-icon fs-4"></i>
                         <span class="hide-menu">Settings</span>
@@ -162,6 +221,7 @@
                         </a>
                     </li>
                 @endif
+
             </ul>
         </nav>
         <!-- End Sidebar navigation -->

@@ -47,6 +47,21 @@
                                     @enderror
                                 </div>
                                 <div class="mb-3">
+                                    <label for="class_id" class="form-label">Class Student<span
+                                            style="color: red">*</span></label>
+                                    <select class="form-control" name="class_id" id="class_id">
+                                        @foreach ($classes as $class)
+                                            <option value="{{ $class->id }}"
+                                                @if ($student->class_id == $class->id) selected @endif>
+                                                {{ $class->class }}
+                                            </option>
+                                        @endforeach
+                                    </select>
+                                    @error('class_id')
+                                        <div class="text-danger">{{ $message }}</div>
+                                    @enderror
+                                </div>
+                                <div class="mb-3">
                                     <label for="major" class="form-label">Major Student<span
                                             style="color: red">*</span></label>
                                     <input type="major" class="form-control" name="major" id="major"

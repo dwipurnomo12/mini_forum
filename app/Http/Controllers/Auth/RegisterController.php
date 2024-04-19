@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
+use App\Models\ClassRoom;
 use App\Providers\RouteServiceProvider;
 use App\Models\User;
 use Illuminate\Foundation\Auth\RegistersUsers;
@@ -41,6 +42,13 @@ class RegisterController extends Controller
         $this->middleware('guest');
     }
 
+    public function showRegistrationForm()
+    {
+        $classes = ClassRoom::all();
+
+        return view('auth.register', ['classes' => $classes]);
+    }
+
     /**
      * Get a validator for an incoming registration request.
      *
@@ -68,12 +76,13 @@ class RegisterController extends Controller
     protected function create(array $data)
     {
         return User::create([
-            'name' => $data['name'],
-            'email' => $data['email'],
-            'password' => Hash::make($data['password']),
-            'role_id'  => $data['role_id'],
+            'name'      => $data['name'],
+            'email'     => $data['email'],
+            'password'  => Hash::make($data['password']),
+            'role_id'   => $data['role_id'],
             'id_number' => $data['id_number'],
-            'major' => $data['major']
+            'major'     => $data['major'],
+            'class_id'  => $data['class_id']
         ]);
     }
 }

@@ -32,19 +32,25 @@
                         </div>
                         <div class="col-lg-4">
                             <div class="card-body">
+                                <input type="hidden" value="{{ $registrations->teacher->id }}" name="teacher_id">
+                                <input type="hidden" value="{{ $registrations->topic->id }}" name="topic_id">
                                 <div class="mb-3">
-                                    <label for="teacher_id" class="form-label">Choose a Teacher / Mentor <span
-                                            style="color: red">*</span></label>
-                                    <select id="teacher_id" class="select-teacher" name="teacher_id" style="width: 100%;">
-                                        <option value="" selected>-- Choose a teacher --</option>
-                                        @foreach ($teachers as $teacher)
-                                            <option value="{{ $teacher->id }}"> {{ $teacher->name }}</option>
-                                        @endforeach
-                                    </select>
-                                    @error('teacher_id')
+                                    <label for="teacher" class="form-label">Your Teacher / Mentor</label>
+                                    <input type="text" class="form-control" value="{{ $registrations->teacher->name }}"
+                                        readonly>
+                                    @error('teacher')
                                         <div class="text-danger">{{ $message }}</div>
                                     @enderror
                                 </div>
+                                <div class="mb-3">
+                                    <label for="topic" class="form-label">Your Topic</label>
+                                    <input type="text" class="form-control" value="{{ $registrations->topic->topic }}"
+                                        readonly>
+                                    @error('topic')
+                                        <div class="text-danger">{{ $message }}</div>
+                                    @enderror
+                                </div>
+
                                 <div class="mb-3">
                                     <label for="title" class="form-label">Question Title <span
                                             style="color: red">*</span></label>

@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\User;
 use App\Models\Answer;
 use App\Models\Question;
+use App\Models\Registration;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Storage;
@@ -30,12 +31,15 @@ class YourQuestionsController extends Controller
      */
     public function create()
     {
+        $studentId = auth()->user()->id;
+        $registrations = Registration::where('student_id', $studentId)->with('topic', 'teacher')->first();
+
         return view('admin.your-questions.create', [
-            'teachers'  => User::with('role')
-                ->where('role_id', '2')
-                ->get()
+            'registrations' => $registrations,
+            'teachers'      => User::with('role')->where('role_id', '2')->get()
         ]);
     }
+
 
     /**
      * Store a newly created resource in storage.
@@ -44,6 +48,7 @@ class YourQuestionsController extends Controller
     {
         $validator = Validator::make($request->all(), [
             'teacher_id'    => 'required',
+            'topic_id'      => 'required',
             'title'         => 'required',
             'body'          => 'required',
             'file'          => 'required|mimes:docx,doc,pdf'
@@ -58,6 +63,7 @@ class YourQuestionsController extends Controller
 
         Question::create([
             'teacher_id'    => $request->input('teacher_id'),
+            'topic_id'      => $request->input('topic_id'),
             'title'         => $request->input('title'),
             'body'          => $request->input('body'),
             'file'          => $filePath,
@@ -99,6 +105,7 @@ class YourQuestionsController extends Controller
         $question = Question::find($id);
         $validator = Validator::make($request->all(), [
             'teacher_id'    => 'required',
+            'topic_id'      => 'required',
             'title'         => 'required',
             'body'          => 'required',
             'file'          => 'mimes:docx,doc,pdf'
@@ -118,6 +125,7 @@ class YourQuestionsController extends Controller
 
             $question->update([
                 'teacher_id'    => $request->input('teacher_id'),
+                'topic'         => $request->input('topic'),
                 'title'         => $request->input('title'),
                 'body'          => $request->input('body'),
                 'file'          => $filePath,

@@ -7,11 +7,11 @@
                 <div class="card-header bg-primary">
                     <div class="row align-items-center">
                         <div class="col-6">
-                            <h5 class="card-title fw-semibold text-white">Students List</h5>
+                            <h5 class="card-title fw-semibold text-white">Topics List</h5>
                         </div>
                         <div class="col-6 text-right">
-                            <a href="/admin/students/create" type="button" class="btn btn-warning float-end">Add New
-                                Student</a>
+                            <a href="/admin/topics/create" type="button" class="btn btn-warning float-end">Add New
+                                Topic</a>
                         </div>
                     </div>
                 </div>
@@ -29,30 +29,26 @@
                                 <thead>
                                     <tr>
                                         <th>No</th>
-                                        <th>Name</th>
-                                        <th>Email</th>
-                                        <th>Class</th>
+                                        <th>Topic</th>
+                                        <th>Description</th>
                                         <th>Action</th>
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    @foreach ($students as $student)
+                                    @foreach ($topics as $topic)
                                         <tr>
                                             <td>{{ $loop->iteration }}</td>
-                                            <td>{{ $student->name }}</td>
-                                            <td>{{ $student->email }}</td>
-                                            <td>{{ $student->class->class }}</td>
+                                            <td>{{ $topic->topic }}</td>
+                                            <td>{{ $topic->description }}</td>
                                             <td>
-                                                <a href="/admin/students/{{ $student->id }}" type="button"
-                                                    class="btn btn-success mb-1"><i class="ti ti-eye"></i></a>
-                                                <a href="/admin/students/{{ $student->id }}/edit" type="button"
+                                                <a href="/admin/topics/{{ $topic->id }}/edit" type="button"
                                                     class="btn btn-warning mb-1"><i class="ti ti-edit"></i></a>
-                                                <form id="{{ $student->id }}" action="/admin/students/{{ $student->id }}"
+                                                <form id="{{ $topic->id }}" action="/admin/topics/{{ $topic->id }}"
                                                     method="POST" class="d-inline">
                                                     @method('delete')
                                                     @csrf
                                                     <button type="button" class="btn btn-danger swal-confirm mb-1"
-                                                        data-form="{{ $student->id }}"><i class="ti ti-trash"></i></button>
+                                                        data-form="{{ $topic->id }}"><i class="ti ti-trash"></i></button>
                                                 </form>
                                             </td>
                                         </tr>

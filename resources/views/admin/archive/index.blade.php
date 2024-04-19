@@ -7,11 +7,7 @@
                 <div class="card-header bg-primary">
                     <div class="row align-items-center">
                         <div class="col-6">
-                            <h5 class="card-title fw-semibold text-white">Your Questions</h5>
-                        </div>
-                        <div class="col-6 text-right">
-                            <a href="/admin/your-questions/create" type="button" class="btn btn-warning float-end">Add New
-                                Question</a>
+                            <h5 class="card-title fw-semibold text-white">Approved Report</h5>
                         </div>
                     </div>
                 </div>
@@ -24,16 +20,47 @@
                     @endif
 
                     <div class="row">
+                        <div class="form-group my-3">
+                            <form action="/admin/archive/filter-data" method="GET">
+                                <div class="row">
+                                    <div class="col">
+                                        <div class="form-group">
+                                            <label for="text">Filter By Class</label>
+                                            <div class="input-group">
+                                                <select class="form-control" name="class_id"
+                                                    aria-label="Default select example">
+                                                    <option value="">Select Class</option>
+                                                    @foreach ($classes as $class)
+                                                        <option value="{{ $class->id }}"
+                                                            {{ request('class_id') == $class->id ? 'selected' : '' }}>
+                                                            {{ $class->class }}
+                                                        </option>
+                                                    @endforeach
+                                                </select>
+
+                                                <div class="ml-2 mt-1">
+                                                    <button type="submit" class="btn btn-sm btn-primary"><i
+                                                            class="fa-solid fa-magnifying-glass"></i> Filter</button>
+
+                                                    <a href="/admin/archive/" class="btn btn-sm btn-danger ml-1"
+                                                        id="refresh_btn"><i class="fa fa-solid fa-rotate-right"></i>
+                                                        Refresh</a>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
                         <div class="table-responsive">
                             <table id="table_id" class="table display">
                                 <thead>
                                     <tr>
                                         <th>No</th>
                                         <th>Title</th>
-                                        <th>Question Date</th>
+                                        <th>Date Approved</th>
                                         <th>Status</th>
                                         <th>File Question</th>
-                                        <th>Answer</th>
                                         <th>Action</th>
                                     </tr>
                                 </thead>
@@ -42,7 +69,7 @@
                                         <tr>
                                             <td>{{ $loop->iteration }}</td>
                                             <td>{{ $question->title }}</td>
-                                            <td>{{ $question->created_at->diffForHumans() }}</td>
+                                            <td>{{ $question->updated_at }}</td>
                                             <td>
                                                 @if ($question->status == 'revision')
                                                     <span class="badge text-bg-warning p-2">{{ $question->status }}</span>
@@ -55,21 +82,8 @@
                                                 </a>
                                             </td>
                                             <td>
-                                                <a href="/admin/your-questions/{{ $question->id }}" type="button"
-                                                    class="btn btn-success mb-1"><i class="ti ti-eye"></i> View</a>
-                                            </td>
-                                            <td>
-                                                <a href="/admin/your-questions/{{ $question->id }}/edit" type="button"
-                                                    class="btn btn-warning mb-1"><i class="ti ti-edit"></i></a>
-                                                <form id="{{ $question->id }}"
-                                                    action="/admin/your-questions/{{ $question->id }}" method="POST"
-                                                    class="d-inline">
-                                                    @method('delete')
-                                                    @csrf
-                                                    <button type="button" class="btn btn-danger swal-confirm mb-1"
-                                                        data-form="{{ $question->id }}"><i
-                                                            class="ti ti-trash"></i></button>
-                                                </form>
+                                                <a href="/admin/archive/{{ $question->id }}" type="button"
+                                                    class="btn btn-success mb-1"><i class="ti ti-eye"></i> Show Detail</a>
                                             </td>
                                         </tr>
                                     @endforeach

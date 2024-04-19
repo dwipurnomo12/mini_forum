@@ -56,6 +56,14 @@
                                                 <input type="number" class="form-control" id="id_number"
                                                     name="id_number">
                                             </div>
+                                            <div class="mb-4">
+                                                <label for="class_id" class="form-label">Class</label>
+                                                <select name="class_id" id="class_id" class="form-control">
+                                                    @foreach ($classes as $class)
+                                                        <option value="{{ $class->id }}">{{ $class->class }}</option>
+                                                    @endforeach
+                                                </select>
+                                            </div>
                                         </div>
                                         <div class="col">
                                             <div class="mb-4">
@@ -69,9 +77,7 @@
                                                     name="password_confirmation">
                                             </div>
                                             <div class="mb-3">
-                                                <label for="role_id" class="form-label"> Register As</label>
-                                                <select id="role_id" name="role_id" class="form-select">
-                                                    <option value="2" selected>Teacher</option>
+                                                <select id="role_id" name="role_id" class="form-select" hidden>
                                                     <option value="3" selected>Student</option>
                                                 </select>
                                             </div>

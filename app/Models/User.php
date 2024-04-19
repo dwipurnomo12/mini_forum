@@ -24,7 +24,8 @@ class User extends Authenticatable
         'photo',
         'role_id',
         'id_number',
-        'major'
+        'major',
+        'class_id'
     ];
 
     /**
@@ -55,5 +56,10 @@ class User extends Authenticatable
     public function questions()
     {
         return $this->hasMany(Question::class);
+    }
+
+    public function class()
+    {
+        return $this->belongsTo(ClassRoom::class);
     }
 }

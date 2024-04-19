@@ -16,8 +16,10 @@ return new class extends Migration
             $table->string('title');
             $table->longText('body');
             $table->string('file');
+            $table->enum('status', ['revision', 'accepted'])->default('revision');
             $table->foreignId('user_id')->constrained('users');
             $table->foreignId('teacher_id')->constrained('users');
+            $table->foreignId('topic_id')->constrained('topics');
             $table->timestamps();
         });
     }
